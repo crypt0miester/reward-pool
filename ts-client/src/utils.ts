@@ -2,6 +2,7 @@ import { AnchorProvider, EventParser, Program } from "@coral-xyz/anchor";
 import {
   Cluster,
   Connection,
+  Keypair,
   LAMPORTS_PER_SOL,
   PublicKey,
   TransactionInstruction,
@@ -20,11 +21,13 @@ import {
   FARM_PROGRAM_ID,
 } from "./constant";
 import { PoolInfo } from "./types";
+import NodeWallet from "@coral-xyz/anchor/dist/cjs/nodewallet";
 
 export const getFarmProgram = (connection: Connection) => {
+  const wallet = new NodeWallet(Keypair.generate());
   const provider = new AnchorProvider(
     connection,
-    {} as any,
+    wallet,
     AnchorProvider.defaultOptions()
   );
   const program = new Program<Farming>(IDL, FARM_PROGRAM_ID, provider);
@@ -33,9 +36,10 @@ export const getFarmProgram = (connection: Connection) => {
 };
 
 export const getAmmProgram = (connection: Connection, programId?: string) => {
+  const wallet = new NodeWallet(Keypair.generate());
   const provider = new AnchorProvider(
     connection,
-    {} as any,
+    wallet,
     AnchorProvider.defaultOptions()
   );
   const ammProgram = new Program<AmmIdl>(

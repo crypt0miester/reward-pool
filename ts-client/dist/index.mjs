@@ -48,6 +48,7 @@ import {
 // src/utils.ts
 import { AnchorProvider, Program } from "@coral-xyz/anchor";
 import {
+  Keypair,
   LAMPORTS_PER_SOL
 } from "@solana/web3.js";
 import {
@@ -1185,10 +1186,12 @@ var DEVNET_COIN = [
 ];
 
 // src/utils.ts
+import NodeWallet from "@coral-xyz/anchor/dist/cjs/nodewallet";
 var getFarmProgram = (connection) => {
+  const wallet = new NodeWallet(Keypair.generate());
   const provider = new AnchorProvider(
     connection,
-    {},
+    wallet,
     AnchorProvider.defaultOptions()
   );
   const program = new Program(IDL, FARM_PROGRAM_ID, provider);

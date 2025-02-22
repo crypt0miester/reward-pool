@@ -1,4 +1,4 @@
-"use strict";Object.defineProperty(exports, "__esModule", {value: true});var __defProp = Object.defineProperty;
+"use strict";Object.defineProperty(exports, "__esModule", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }var __defProp = Object.defineProperty;
 var __getOwnPropSymbols = Object.getOwnPropertySymbols;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __propIsEnum = Object.prototype.propertyIsEnumerable;
@@ -46,6 +46,7 @@ var _spltoken = require('@solana/spl-token');
 var _web3js = require('@solana/web3.js');
 
 // src/utils.ts
+
 
 
 
@@ -1185,10 +1186,12 @@ var DEVNET_COIN = [
 ];
 
 // src/utils.ts
+var _nodewallet = require('@coral-xyz/anchor/dist/cjs/nodewallet'); var _nodewallet2 = _interopRequireDefault(_nodewallet);
 var getFarmProgram = (connection) => {
+  const wallet = new (0, _nodewallet2.default)(_web3js.Keypair.generate());
   const provider = new (0, _anchor.AnchorProvider)(
     connection,
-    {},
+    wallet,
     _anchor.AnchorProvider.defaultOptions()
   );
   const program = new (0, _anchor.Program)(IDL, FARM_PROGRAM_ID, provider);
