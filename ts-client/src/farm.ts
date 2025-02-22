@@ -10,7 +10,6 @@ import {
   Transaction,
   TransactionInstruction,
 } from "@solana/web3.js";
-import * as BufferLayout from "buffer-layout";
 
 import { FarmProgram, Opt, PoolState, UserState } from "./types";
 import {
