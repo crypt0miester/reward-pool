@@ -1207,8 +1207,8 @@ var getOrCreateATAInstruction = (tokenMint, owner, connection) => __async(void 0
   let toAccount;
   try {
     toAccount = yield _spltoken.getAssociatedTokenAddress.call(void 0, 
-      owner,
       tokenMint,
+      owner,
       false,
       _spltoken.TOKEN_PROGRAM_ID,
       _spltoken.ASSOCIATED_TOKEN_PROGRAM_ID

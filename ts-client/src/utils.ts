@@ -77,8 +77,8 @@ export const getOrCreateATAInstruction = async (
   let toAccount;
   try {
     toAccount = await getAssociatedTokenAddress(
-      owner,
       tokenMint,
+      owner,
       false,
       TOKEN_PROGRAM_ID,
       ASSOCIATED_TOKEN_PROGRAM_ID,

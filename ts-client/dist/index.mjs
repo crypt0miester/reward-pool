@@ -1207,8 +1207,8 @@ var getOrCreateATAInstruction = (tokenMint, owner, connection) => __async(void 0
   let toAccount;
   try {
     toAccount = yield getAssociatedTokenAddress(
-      owner,
       tokenMint,
+      owner,
       false,
       TOKEN_PROGRAM_ID,
       ASSOCIATED_TOKEN_PROGRAM_ID
