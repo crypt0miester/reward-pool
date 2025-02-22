@@ -11,8 +11,6 @@ import {
   TOKEN_PROGRAM_ID,
   Token,
 } from "@solana/spl-token";
-import fetch from "node-fetch";
-
 import { Farming, IDL } from "./idl/farming-idl";
 import { Amm as AmmIdl, IDL as AmmIDL } from "./idl/amm-idl";
 import {

@@ -1,4 +1,4 @@
-"use strict";Object.defineProperty(exports, "__esModule", {value: true}); function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }var __defProp = Object.defineProperty;
+"use strict";Object.defineProperty(exports, "__esModule", {value: true});var __defProp = Object.defineProperty;
 var __getOwnPropSymbols = Object.getOwnPropertySymbols;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __propIsEnum = Object.prototype.propertyIsEnumerable;
@@ -55,7 +55,6 @@ var _web3js = require('@solana/web3.js');
 
 
 
-var _nodefetch = require('node-fetch'); var _nodefetch2 = _interopRequireDefault(_nodefetch);
 
 // src/idl/farming-idl.ts
 var IDL = {
@@ -1195,7 +1194,7 @@ var getFarmProgram = (connection) => {
   return { provider, program };
 };
 var getFarmInfo = (cluster = "mainnet-beta") => __async(void 0, null, function* () {
-  const data = yield _nodefetch2.default.call(void 0, FARMING_API_ENDPOINT[cluster]).then(
+  const data = yield fetch(FARMING_API_ENDPOINT[cluster]).then(
     (res) => res.json()
   );
   return data;

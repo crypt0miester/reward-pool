@@ -55,7 +55,6 @@ import {
   TOKEN_PROGRAM_ID,
   Token
 } from "@solana/spl-token";
-import fetch from "node-fetch";
 
 // src/idl/farming-idl.ts
 var IDL = {

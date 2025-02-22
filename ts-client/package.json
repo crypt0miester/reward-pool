@@ -28,10 +28,9 @@
     "@coral-xyz/anchor": "0.29.0",
     "@solana/spl-token": "^0.3.11",
     "@solana/spl-token-registry": "^0.2.4574",
-    "@solana/web3.js": "=1.95.3",
-    "node-fetch": "^2.6.12"
+    "@solana/web3.js": "=1.95.3"
   },
-  "resolutions": {
+  "overrides": {
     "@solana/web3.js": "1.95.3"
   },
   "publishConfig": {
