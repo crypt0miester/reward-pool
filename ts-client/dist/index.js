@@ -56,6 +56,7 @@ var _web3js = require('@solana/web3.js');
 
 
 
+
 // src/idl/farming-idl.ts
 var IDL = {
   "version": "0.2.2",
@@ -1202,21 +1203,22 @@ var getFarmInfo = (cluster = "mainnet-beta") => __async(void 0, null, function* 
 var getOrCreateATAInstruction = (tokenMint, owner, connection) => __async(void 0, null, function* () {
   let toAccount;
   try {
-    toAccount = yield _spltoken.Token.getAssociatedTokenAddress(
-      _spltoken.ASSOCIATED_TOKEN_PROGRAM_ID,
-      _spltoken.TOKEN_PROGRAM_ID,
+    toAccount = yield _spltoken.getAssociatedTokenAddress.call(void 0, 
+      owner,
       tokenMint,
-      owner
+      false,
+      _spltoken.TOKEN_PROGRAM_ID,
+      _spltoken.ASSOCIATED_TOKEN_PROGRAM_ID
     );
     const account = yield connection.getAccountInfo(toAccount);
     if (!account) {
-      const ix = _spltoken.Token.createAssociatedTokenAccountInstruction(
-        _spltoken.ASSOCIATED_TOKEN_PROGRAM_ID,
-        _spltoken.TOKEN_PROGRAM_ID,
-        tokenMint,
+      const ix = _spltoken.createAssociatedTokenAccountInstruction.call(void 0, 
+        owner,
         toAccount,
         owner,
-        owner
+        tokenMint,
+        _spltoken.TOKEN_PROGRAM_ID,
+        _spltoken.ASSOCIATED_TOKEN_PROGRAM_ID
       );
       return [toAccount, ix];
     }
@@ -1233,7 +1235,16 @@ function chunks(array, size) {
 }
 
 // src/farm.ts
-var _utils = require('@mercurial-finance/dynamic-amm-sdk/dist/cjs/src/amm/utils');
+function chunkedGetMultipleAccountInfos(connection, pks, chunkSize = 100) {
+  return __async(this, null, function* () {
+    const accountInfos = (yield Promise.all(
+      chunks(pks, chunkSize).map(
+        (chunk) => connection.getMultipleAccountsInfo(chunk)
+      )
+    )).flat();
+    return accountInfos;
+  });
+}
 var chunkedFetchMultipleUserAccount = (program, pks, chunkSize = 100) => __async(void 0, null, function* () {
   const accounts = (yield Promise.all(
     chunks(pks, chunkSize).map(
@@ -1533,7 +1544,7 @@ var PoolFarmImpl = class _PoolFarmImpl {
         return userStakingAddress;
       });
       const accountsToFetched = [_web3js.SYSVAR_CLOCK_PUBKEY, ...farmMints, ...usersPda];
-      const accounts = yield _utils.chunkedGetMultipleAccountInfos.call(void 0, 
+      const accounts = yield chunkedGetMultipleAccountInfos(
         connection,
         accountsToFetched
       );
@@ -1598,5 +1609,6 @@ function rewardPerToken(pool, lastTimeRewardApplicable) {
 }
 
 
-exports.PoolFarmImpl = PoolFarmImpl;
+
+exports.PoolFarmImpl = PoolFarmImpl; exports.chunkedGetMultipleAccountInfos = chunkedGetMultipleAccountInfos;
 //# sourceMappingURL=index.js.map

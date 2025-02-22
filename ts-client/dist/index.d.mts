@@ -1,5 +1,6 @@
+import * as _solana_web3_js from '@solana/web3.js';
+import { Connection, PublicKey, Cluster, Transaction } from '@solana/web3.js';
 import { IdlAccounts, BN } from '@coral-xyz/anchor';
-import { PublicKey, Connection, Cluster, Transaction } from '@solana/web3.js';
 
 type Farming = {
     "version": "0.2.2";
@@ -1069,6 +1070,7 @@ type Farming = {
 
 type PoolState = IdlAccounts<Farming>["pool"];
 
+declare function chunkedGetMultipleAccountInfos(connection: Connection, pks: PublicKey[], chunkSize?: number): Promise<_solana_web3_js.AccountInfo<Buffer<ArrayBufferLike>>[]>;
 declare class PoolFarmImpl {
     address: PublicKey;
     private program;
@@ -1119,4 +1121,4 @@ declare class PoolFarmImpl {
     }>>;
 }
 
-export { PoolFarmImpl };
+export { PoolFarmImpl, chunkedGetMultipleAccountInfos };

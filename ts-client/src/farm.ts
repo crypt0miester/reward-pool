@@ -20,7 +20,24 @@ import {
   parseLogs,
 } from "./utils";
 import { FARM_PROGRAM_ID } from "./constant";
-import { chunkedGetMultipleAccountInfos } from "@mercurial-finance/dynamic-amm-sdk/dist/cjs/src/amm/utils";
+
+
+
+export async function chunkedGetMultipleAccountInfos(
+  connection: Connection,
+  pks: PublicKey[],
+  chunkSize: number = 100
+) {
+  const accountInfos = (
+    await Promise.all(
+      chunks(pks, chunkSize).map((chunk) =>
+        connection.getMultipleAccountsInfo(chunk)
+      )
+    )
+  ).flat();
+
+  return accountInfos;
+}
 
 const chunkedFetchMultipleUserAccount = async (
   program: FarmProgram,

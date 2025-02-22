@@ -52,8 +52,9 @@ import {
 } from "@solana/web3.js";
 import {
   ASSOCIATED_TOKEN_PROGRAM_ID,
-  TOKEN_PROGRAM_ID,
-  Token
+  createAssociatedTokenAccountInstruction,
+  getAssociatedTokenAddress,
+  TOKEN_PROGRAM_ID
 } from "@solana/spl-token";
 
 // src/idl/farming-idl.ts
@@ -1202,21 +1203,22 @@ var getFarmInfo = (cluster = "mainnet-beta") => __async(void 0, null, function* 
 var getOrCreateATAInstruction = (tokenMint, owner, connection) => __async(void 0, null, function* () {
   let toAccount;
   try {
-    toAccount = yield Token.getAssociatedTokenAddress(
-      ASSOCIATED_TOKEN_PROGRAM_ID,
-      TOKEN_PROGRAM_ID,
+    toAccount = yield getAssociatedTokenAddress(
+      owner,
       tokenMint,
-      owner
+      false,
+      TOKEN_PROGRAM_ID,
+      ASSOCIATED_TOKEN_PROGRAM_ID
     );
     const account = yield connection.getAccountInfo(toAccount);
     if (!account) {
-      const ix = Token.createAssociatedTokenAccountInstruction(
-        ASSOCIATED_TOKEN_PROGRAM_ID,
-        TOKEN_PROGRAM_ID,
-        tokenMint,
+      const ix = createAssociatedTokenAccountInstruction(
+        owner,
         toAccount,
         owner,
-        owner
+        tokenMint,
+        TOKEN_PROGRAM_ID,
+        ASSOCIATED_TOKEN_PROGRAM_ID
       );
       return [toAccount, ix];
     }
@@ -1233,7 +1235,16 @@ function chunks(array, size) {
 }
 
 // src/farm.ts
-import { chunkedGetMultipleAccountInfos } from "@mercurial-finance/dynamic-amm-sdk/dist/cjs/src/amm/utils";
+function chunkedGetMultipleAccountInfos(connection, pks, chunkSize = 100) {
+  return __async(this, null, function* () {
+    const accountInfos = (yield Promise.all(
+      chunks(pks, chunkSize).map(
+        (chunk) => connection.getMultipleAccountsInfo(chunk)
+      )
+    )).flat();
+    return accountInfos;
+  });
+}
 var chunkedFetchMultipleUserAccount = (program, pks, chunkSize = 100) => __async(void 0, null, function* () {
   const accounts = (yield Promise.all(
     chunks(pks, chunkSize).map(
@@ -1597,6 +1608,7 @@ function rewardPerToken(pool, lastTimeRewardApplicable) {
   };
 }
 export {
-  PoolFarmImpl
+  PoolFarmImpl,
+  chunkedGetMultipleAccountInfos
 };
 //# sourceMappingURL=index.mjs.map
